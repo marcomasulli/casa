@@ -115,10 +115,10 @@
     </section>
 		<!-- Body -->
 		<div class="container">
-		<section class="hero is-fullheight is-dark">
-				<div class="columns">
-					{% for application in applications %}
-					<div class="column is half">
+			<section class="hero is-fullheight is-dark">
+				<div class="columns is-multiline is-mobile">
+				{% for application in applications %}
+					<div class="column is-half">
 						<div class="card">
 							<header class="card-header">
 								<p class="card-header-title">
@@ -137,8 +137,9 @@
 							</footer>
 						</div>
 					</div>
-					{% endfor %}
-				</div>
+				{% endfor %}
+				<br>
+			</div>
 		</section>  
 		<!-- Modal -->    
 	</div>
