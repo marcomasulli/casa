@@ -35,5 +35,5 @@ def delete_app(id):
 
 @app.route('/settings', methods=['POST', 'GET'])
 def settings():
-    return render_template('home.html')
+    return render_template('settings.html')
     

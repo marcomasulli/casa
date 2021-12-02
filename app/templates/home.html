@@ -1,149 +1,40 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<title>Casa</title>
-		<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma-rtl.min.css">
-    <script src="https://kit.fontawesome.com/1f72df6afb.js" crossorigin="anonymous"></script>
-    
-	</head>
-	<body class="has-background-dark">
-    <!-- Head & Navbar -->
-    <section class="section" id="header">
-      <div class="container">
-        <div class="columns">
-          <div class="column">
-            <nav id="navbarApp" class="navbar is-dark mb-1" role="navigation" aria-label="main navigation">
-              <div class="navbar-brand">
-								
-								<a class="navbar-item" href="#">
-									<i class="fas fa-home fa-4x"></i>
-								</a>
+{% extends 'base.html' %}
 
-                <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                  <span aria-hidden="true"></span>
-                </a>
-              </div>
-
-              <div id="navbarBody" class="navbar-menu">
-              </div>
-
-              <div class="navbar-end">
-								<div class="navbar-item">
-                  <div class="buttons">
-                    <a id="modalToggleButton" class="button is-primary modal-button ml-5 mr-1" v-on:click="showModal = true">
-											<strong>Add App</strong>
-										</a>
-                  </div>
-                </div>
-                <div class="navbar-item">
-                  <div class="buttons">
-                    <a class="button is-primary ml-1 mr-1">
-                      <strong>Settings</strong>
-                    </a>
-                  </div>
-                </div>
-              </div>
-							<div class="modal" v-bind:class="{ 'is-active': showModal }">
-								<div class="modal-background" v-on:click="showModal = false">
-								</div>
-								<div class="modal-card">
-									<header class="modal-card-head">
-										<p class="modal-card-title">New Application</p>
-										<button class="delete" aria-label="close" v-on:click="showModal = false"></button>
-									</header>
-									<section class="modal-card-body">
-										<form action="{{ url_for('home') }}" method="POST">
-											{{ new_app_form.csrf_token }}
-											<div class="field">
-												<label class="label">Application Name</label>
-												<div class="control has-icons-left has-icons-right">
-													{{ new_app_form.app_name(class="input") }}
-													<span class="icon is-small is-left">
-														<i class="fas fa-file-signature"></i>
-													</span>
-												</div>
-											</div>
-					
-											<div class="field">
-												<label class="label">Application Description</label>
-												<div class="control">
-													{{ new_app_form.app_description(class="textarea") }}
-												</div>
-											</div>
-											
-											<div class="field">
-												<label class="label">Application Address</label>
-											</div>
-											<div class="field has-addons">
-												<p class="control">
-													<span class="select">
-														{{ new_app_form.app_protocol() }}
-												</p>
-												<div class="control is-expanded">
-													{{ new_app_form.app_address(class="input") }}
-												</div>
-											</div>
-										
-											<div class="field">
-												<label class="label">Port</label>
-												<div class="control has-icons-left has-icons-right">	
-													{{ new_app_form.app_port(class="input") }}
-													<span class="icon is-small is-left">
-														<i class="fas fa-globe"></i>
-													</span>
-												</div>
-											</div>    
-											
-											<div class="field is-grouped">
-												<div class="control">
-													{{ new_app_form.submit(class="button-is-link is-light") }}
-												</div>
-											</div>
-										</form>
-									</section>    
-								</div>
-							</div>
-						</nav>
-          </div>
-        </div>
-      </div>
-    </section>
-		<!-- Body -->
-		<div class="container">
-			<section class="hero is-fullheight is-dark">
-				<div class="columns is-multiline is-mobile">
-				{% for application in applications %}
-					<div class="column is-half">
-						<div class="card">
-							<header class="card-header">
-								<p class="card-header-title">
-									{{ application.app_name }}
-								</p>
-							</header>
-							<div class="card-content">
-								<div class="content">
-									{{ application.app_description }}
-								</div>
-							</div>
-							<footer class="card-footer">
-								<a href="{{application.app_protocol}}://{{application.app_address}}:{{application.app_port}}" target="_blank" class="card-footer-item"><b>Go to app</b></a>
-								<!-- a href="./{{application.id}}/edit" class="card-footer-item">Edit</a -->
-								<a href="./{{application.id}}/delete" class="card-footer-item">Delete</a>
-							</footer>
+{% block title %} Casa {% endblock %}
+<!-- Body -->
+{% block content %}
+<div class="container">
+	<section class="hero is-fullheight is-dark">
+		<div class="columns is-multiline is-mobile">
+		{% for application in applications %}
+			<div class="column is-half">
+				<div class="card">
+					<header class="card-header">
+						<p class="card-header-title">
+							{{ application.app_name }}
+						</p>
+					</header>
+					<div class="card-content">
+						<div class="content">
+							{{ application.app_description }}
 						</div>
 					</div>
-				{% endfor %}
-				<br>
+					<footer class="card-footer">
+						<a href="{{application.app_protocol}}://{{application.app_address}}:{{application.app_port}}" target="_blank" class="card-footer-item"><b>Go to app</b></a>
+						<!-- a href="./{{application.id}}/edit" class="card-footer-item">Edit</a -->
+						<a href="./{{application.id}}/delete" class="card-footer-item">Delete</a>
+					</footer>
+				</div>
 			</div>
-		</section>  
-		<!-- Modal -->    
-	</div>
-	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+		{% endfor %}
+		<br>
+		</div>
+	</section>  
+</div>
+{% endblock %}
+{% block scripts %}	
+{{ super() }}
 	<script type="text/javascript" src="{{url_for('static', filename='addApplicationModal.js')}}"></script>
+{% endblock %}	
 	</body>
 </html>
