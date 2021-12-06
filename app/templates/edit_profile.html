@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+
+{% block title %} Edit Profile {% endblock %}
+
+{% block navbar_buttons %}
+{{ super() }}
+<div class="navbar-item">
+    <div class="buttons">
+        <a class="button is-primary modal-button ml-5 mr-1" href='../../preferences'>
+            <strong>Preferences</strong>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero is-fullheight">
+      <div class="block">
+      <section class="box has-background-light">
+        <form id="editProfileForm" action="{{ url_for('edit_profile', profile_id=profile_id) }}" method="POST">
+            {{ profile_form.csrf_token }}
+            <div class="field">
+                <label class="label">Profile Name</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            {{ profile_form.profile_name(class="input") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Default URL</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            {{ profile_form.profile_default_url(class="input") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Profile Background</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <span class="select">
+                                {{ profile_form.profile_background(class="select") }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="file field">
+                <label class="file-label is-normal">
+                    {{ profile_form.profile_background_picture(class="file-input") }}
+                    <span class="file-cta">
+                        <span class="file-icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span class="file-label">
+                            Choose a file…
+                        </span>
+                    </span>
+                </label>
+            </div>
+            <div class="field">
+                <label class="label">Columns</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            {{ profile_form.profile_columns(class="input") }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Cards per row</label>
+                <div class="field-body">
+                    <div class="field">
+                        <div class="control">
+                            <span class="select">
+                            {{ profile_form.profile_cards_per_row(class="select") }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="checkbox">
+                    {{ profile_form.profile_is_current(class="checkbox") }}
+                    Current Profile
+                </label>
+            </div>
+            <div class="field">
+                <div class="control">
+                    {{ profile_form.profile_submit(class="button is-link", value="Submit") }}
+                </div>
+            </div>
+        </form>
+      </section>
+    </div>
+    </section>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{url_for('static', filename='editProfile.js')}}"></script>
+{% endblock %}

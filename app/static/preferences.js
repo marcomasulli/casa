@@ -3,6 +3,6 @@
 var app = new Vue({
   el: '#navbarApp',
   data: {
-    showModal: false
+    showProfileModal: false
   }
 });

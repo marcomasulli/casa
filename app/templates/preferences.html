@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %} Preferences {% endblock %}
+
+{% block navbar_buttons %}
+{{ super() }}
+<div class="navbar-item">
+	<div class="buttons">
+
+		<a id="profileModalToggleButton" class="button is-primary modal-button ml-5 mr-1"
+			v-on:click="showProfileModal = true">
+			<strong>Add Profile</strong>
+		</a>
+
+	</div>
+</div>
+{% endblock %}
+
+{% block modals %}
+{{ super() }}
+<div class="modal" v-bind:class="{ 'is-active': showProfileModal }">
+	<div class="modal-background" v-on:click="showProfileModal = false">
+	</div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<p class="modal-card-title">New Profile</p>
+			<button class="delete" aria-label="close" v-on:click="showProfileModal = false"></button>
+		</header>
+		<section class="modal-card-body">
+			<form action="./preferences" method="POST">
+				{{ profile_form.csrf_token }}
+				<div class="field">
+					<label class="label">Profile Name</label>
+					<div class="field-body">
+						<div class="field">
+							<div class="control">
+								{{ profile_form.profile_name(class="input") }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">Default URL</label>
+					<div class="field-body">
+						<div class="field">
+							<div class="control">
+								{{ profile_form.profile_default_url(class="input") }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">Profile Background</label>
+					<div class="field-body">
+						<div class="field">
+							<div class="control">
+								<span class="select">
+									{{ profile_form.profile_background(class="select") }}
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="file field">
+					<label class="file-label is-normal">
+						{{ profile_form.profile_background_picture(class="file-input") }}
+						<span class="file-cta">
+							<span class="file-icon">
+								<i class="fas fa-upload"></i>
+							</span>
+							<span class="file-label">
+								Choose a file…
+							</span>
+						</span>
+					</label>
+				</div>
+				<div class="field">
+					<label class="label">Columns</label>
+					<div class="field-body">
+						<div class="field">
+							<div class="control">
+								{{ profile_form.profile_columns(class="input") }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">Cards per row</label>
+					<div class="field-body">
+						<div class="field">
+							<div class="control">
+								{{ profile_form.profile_cards_per_row(class="input") }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="field">
+					<label class="checkbox">
+						{{ profile_form.profile_is_current(class="checkbox") }}
+						Current Profile
+					</label>
+				</div>
+				<div class="field">
+					<div class="control">
+						{{ profile_form.profile_submit(class="button is-link", value="Submit") }}
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
+{% endblock %}
+<!-- Body -->
+{% block content %}
+<div class="container">
+	<section class="hero is-fullheight is-transparent">
+		{% if profiles %}
+		<div class="table-container">
+			<table class="table is-bordered is-striped is-fullwidth">
+				<thead>
+					<tr>
+						<th><abbr title="Profile Name">Name</abbr></th>
+						<th><abbr title="Default Url">Url</abbr></th>
+						<th><abbr title="Background">BG</abbr></th>
+						<th><abbr title="Columns">Cols</abbr></th>
+						<th><abbr title="Cards per Row">Cards</abbr></th>
+						<th><abbr title="Is Current">Current</abbr></th>
+						<th><abbr title="Action">Action</abbr></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for row in profiles %}
+					<tr id="row_{{ row.Profile.id }}">
+						<td> {{ row.Profile.profile_name }} </td>
+						<td> {{ row.Profile.profile_default_url }} </td>
+						<td> {{ row.Background.background }} </td>
+						<td> {{ row.Profile.profile_columns }} </td>
+						<td> {{ row.Profile.profile_cards_per_row }} </td>
+						<td> {{ row.Profile.profile_is_current }} </td>
+						<td>
+							<div class="field is-grouped">
+								<p class="control">
+									<a class="button is-link mr-1" href="./profile/{{ row.Profile.id }}/edit">
+										Edit
+									</a>
+								</p>
+								<p class="control">
+									<a class="button is-danger ml-1" href="./profile/{{ row.Profile.id }}/delete">
+										<span class="icon is-small">
+											<i class="fas fa-times"></i>
+										</span>
+									</a>
+								</p>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			{% endif %}
+		</div>
+	</section>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{url_for('static', filename='preferences.js')}}"></script>
+{% endblock %}
+</body>
+
+</html>

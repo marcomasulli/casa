@@ -2,39 +2,149 @@
 
 {% block title %} Casa {% endblock %}
 <!-- Body -->
+{% block navbar_buttons %}
+{{ super() }}
+<div class="navbar-item">
+	<div class="buttons">
+		<a id="modalToggleButton" class="button is-primary modal-button ml-5 mr-1" v-on:click="showAppModal = true">
+			<strong>Add App</strong>
+		</a>
+	</div>
+</div>
+<div class="navbar-item">
+	<div class="buttons">
+		<a class="button is-primary ml-1 mr-1" href="./preferences">
+			<strong>Preferences</strong>
+		</a>
+	</div>
+</div>
+{% endblock %}
+{% block modals %}
+{{ super() }}
+
+<div class="modal" v-bind:class="{ 'is-active': showAppModal }">
+	<div class="modal-background" v-on:click="showAppModal = false">
+	</div>
+	<div class="modal-card">
+		<header class="modal-card-head">
+			<p class="modal-card-title">New Application</p>
+			<button class="delete" aria-label="close" v-on:click="showAppModal = false"></button>
+		</header>
+		<section class="modal-card-body">
+			<form action="{{ url_for('home') }}" method="POST">
+				{{ new_app_form.csrf_token }}
+				<div class="field">
+					<label class="label">Application Name</label>
+					<div class="control has-icons-left has-icons-right">
+						{{ new_app_form.app_name(class="input") }}
+						<span class="icon is-small is-left">
+							<i class="fas fa-file-signature"></i>
+						</span>
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label">Application Icon Link</label>
+					<div class="control has-icons-left has-icons-right">
+						{{ new_app_form.app_icon_link(class="input") }}
+						<span class="icon is-small is-left">
+							<i class="fas fa-file-link"></i>
+						</span>
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label">Application Description</label>
+					<div class="control">
+						{{ new_app_form.app_description(class="textarea") }}
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label">Application Address</label>
+				</div>
+				<div class="field has-addons">
+					<p class="control">
+						<span class="select">
+							{{ new_app_form.app_protocol() }}
+					</p>
+					<div class="control is-expanded">
+						{{ new_app_form.app_address(class="input") }}
+					</div>
+				</div>
+
+				<div class="field">
+					<label class="label">Port</label>
+					<div class="control has-icons-left has-icons-right">
+						{{ new_app_form.app_port(class="input") }}
+						<span class="icon is-small is-left">
+							<i class="fas fa-globe"></i>
+						</span>
+					</div>
+				</div>
+
+				<div class="field is-grouped">
+					<div class="control">
+						{{ new_app_form.submit(class="button-is-link is-light") }}
+					</div>
+				</div>
+			</form>
+		</section>
+	</div>
+</div>
+
+{% endblock %}
 {% block content %}
 <div class="container">
-	<section class="hero is-fullheight is-dark">
+	<section class="hero is-fullheight is-transparent">
 		<div class="columns is-multiline is-mobile">
-		{% for application in applications %}
+			{% for application in applications %}
+			{% if current_profile %}
+			<div class="column {{ current_profile.RowStructure.row_class }}">
+			{% else %}
 			<div class="column is-half">
+			{% endif %}
 				<div class="card">
-					<header class="card-header">
+					<!-- header class="card-header">
 						<p class="card-header-title">
 							{{ application.app_name }}
 						</p>
-					</header>
+					</header -->
 					<div class="card-content">
-						<div class="content">
-							{{ application.app_description }}
+						<div class="media">
+							<div class="media-left">
+							  <figure class="image is-48x48">
+								<img src="{{ application.app_icon_link }}">
+							  </figure>
+							</div>
+							<div class="media-content">
+								<div class="content">
+									<p class="title is-4 ml-3">
+											{{ application.app_name }}
+									</p>
+									{{ application.app_description }}
+								</div>
+							</div>
 						</div>
 					</div>
 					<footer class="card-footer">
-						<a href="{{application.app_protocol}}://{{application.app_address}}:{{application.app_port}}" target="_blank" class="card-footer-item"><b>Go to app</b></a>
+						<a href="{{application.app_protocol}}://{{current_profile.Profile.profile_default_url}}:{{application.app_port}}"
+							target="_blank" class="card-footer-item"><b>Go to app</b></a>
 						<!-- a href="./{{application.id}}/edit" class="card-footer-item">Edit</a -->
 						<a href="./{{application.id}}/delete" class="card-footer-item">Delete</a>
 					</footer>
 				</div>
 			</div>
-		{% endfor %}
-		<br>
+			{% endfor %}
+			<br>
 		</div>
-	</section>  
+	</section>
 </div>
 {% endblock %}
-{% block scripts %}	
+{% block scripts %}
 {{ super() }}
-	<script type="text/javascript" src="{{url_for('static', filename='addApplicationModal.js')}}"></script>
-{% endblock %}	
-	</body>
+<script type="text/javascript" src="{{url_for('static', filename='home.js')}}"></script>
+{% endblock %}
+</body>
+
 </html>
